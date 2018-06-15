@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Site;
 
 class SitesController extends Controller
 {
@@ -13,7 +14,8 @@ class SitesController extends Controller
      */
     public function index()
     {
-        //
+        $sites = Site::all();
+        return $sites;
     }
 
     /**
@@ -34,7 +36,10 @@ class SitesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $site = Site::create($request->all());
+
+        return $site;
     }
 
     /**
