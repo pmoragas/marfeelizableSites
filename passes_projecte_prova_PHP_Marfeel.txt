@@ -1,0 +1,11 @@
+1. instal·lar composer 
+2. crear projecte laravel
+3. crear model - SITE
+4. crear taula MYSQL - SITES
+5. modificar .env
+6. crear migrate create_sites_table
+7. seeder?
+8. crear controlador CRUD API 
+9. crear ruta al resources ->only store i index
+10. omplir els mètodes del controlador index i store
+11. completar el mètode store amb la funcionalitat demanada -> ha de poder rebre un array de sites / comprovar si marfeelable / guardar
