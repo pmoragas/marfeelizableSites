@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::Resource('sites', 'SitesController')->only([
+    'index', 'store'
+]);
