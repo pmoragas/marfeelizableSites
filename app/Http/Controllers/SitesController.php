@@ -18,16 +18,7 @@ class SitesController extends Controller
         return $sites;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -36,54 +27,68 @@ class SitesController extends Controller
      */
     public function store(Request $request)
     {
+        $input = $request->all();
+        
+        //check if array
+        if(is_array($input)){
+            
+            //loop through json array
+            foreach ($input as $site) {
+                
+                if($this->checkIsMarfeelizable($site['url'])){
+                    //isMarfeelizable -> 1
+                    $site['isMarfeelizable'] = 1;
+                    Site::create($site);
+                } else {
+                    //isMarfeelizable -> 0
+                    $site['isMarfeelizable'] = 0;
+                    Site::create($site);
+                }
+            }
+        }
 
-        $site = Site::create($request->all());
-
-        return $site;
+        return $request;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    //concentrates all checks for being marfeelizable
+    function checkIsMarfeelizable(string $url)
     {
-        //
+
+        $title_content = $this->page_title($url);
+        
+        $isNews = $this->textHasWord('news',$title_content);
+        $isNoticias = $this->textHasWord('noticias',$title_content);
+        
+        $isMarfeelizable = $isNews or $isNoticias;
+
+        return $isMarfeelizable;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    //returns page title if available
+    private function page_title($url) {
+        $fp = file_get_contents("http://" . $url);
+        if (!$fp) 
+            return null;
+
+        $res = preg_match("/<title>(.*)<\/title>/siU", $fp, $title_matches);
+        if (!$res) 
+            return null; 
+
+        // Clean up title: remove EOL's and excessive whitespace.
+        $title = preg_replace('/\s+/', ' ', $title_matches[1]);
+        $title = trim($title);
+        return $title;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    //returns TRUE if $word is inside $text
+    private function textHasWord(string $word, string $text){
+        if(strpos($text,$word) === false){
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
+
 }

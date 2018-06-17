@@ -15,6 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::Resource('sites', 'SitesController')->only([
-    'index', 'store'
-]);
+Route::get('sites', 'SitesController@index');
+
+Route::post('sites', 'SitesController@store');
