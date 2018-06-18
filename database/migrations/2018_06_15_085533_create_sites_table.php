@@ -18,6 +18,7 @@ class CreateSitesTable extends Migration
             $table->string('url');
             $table->integer('rank');
             $table->boolean('isMarfeelizable');
+            //$table->string('title');
             $table->timestamps();
         });
     }
