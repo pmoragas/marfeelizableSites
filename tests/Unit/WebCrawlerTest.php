@@ -25,4 +25,24 @@ class WebCrawlerTest extends TestCase
         $webCrawler = new WebCrawler;
         $this->assertEquals($webCrawler->get_title('<title>YouTube</title>'),'YouTube');
     }
+
+    public function testGetTitleNull()
+    {
+        $webCrawler = new WebCrawler;
+        $this->assertEquals($webCrawler->get_title(null),null);
+    }
+
+    public function testGetWebPageERROR()
+    {
+        $webCrawler = new WebCrawler;
+        $webPage = $webCrawler->get_web_page('randomurlijustinvented.com/');
+        $this->assertEquals($webPage['content'],false);
+    }
+
+    public function testGetWebPageOK()
+    {
+        $webCrawler = new WebCrawler;
+        $webPage = $webCrawler->get_web_page('microsiervos.com');
+        $this->assertEquals($webPage['http_code'],200);
+    }
 }

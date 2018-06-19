@@ -46,9 +46,9 @@
             $text = strtoupper($text);
 
             if(strpos($text,$word) === false){
-                return 0;
+                return false;
             } else {
-                return 1;
+                return true;
             }
         }
 
@@ -58,8 +58,8 @@
             $isNews = $this->textHasWord('news',$title);
             $isNoticias = $this->textHasWord('noticias',$title);
             $isNoteecias = $this->textHasWord('notícias',$title);
-            
-            $isMarfeelizable = $isNews || $isNoticias || $isNoteecias; 
+    
+            return $isNews || $isNoticias || $isNoteecias;
         }
     }
 

@@ -16,8 +16,11 @@ class SitesController extends Controller
      */
     public function index()
     {
-        $sites = Site::all();
-        return $sites;
+        $webCrawler = new WebCrawler;
+        $webpage = $webCrawler->get_web_page('sex.com');
+        
+        return response()->json($webpage);
+        //return response()->json('');
     }
 
     
