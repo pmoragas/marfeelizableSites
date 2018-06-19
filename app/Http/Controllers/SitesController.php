@@ -28,14 +28,15 @@ class SitesController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        
+        $marfeelOperations = new MarfeelOperations;
+
         //check if array
         if(is_array($input)){
             
             //loop through json array
             foreach ($input as $site) {
                 
-                $isMarfeelizable = $this->checkIsMarfeelizable($site['url']);
+                $isMarfeelizable = $marfeelOperations->checkIsMarfeelizable($site['url']);
                 //return response()->json($isMarfeelizable);
 
                 if($isMarfeelizable == true){
@@ -56,11 +57,24 @@ class SitesController extends Controller
         return $request;
     }
 
+    
+
+    
+
+
+
+}
+
+class MarfeelOperations {
+
     //concentrates all checks for being marfeelizable
-    function checkIsMarfeelizable(string $url)
+    public function checkIsMarfeelizable(string $url)
     {
+        $webCrawler = new WebCrawler;
+
         try {
-            $data = $this->get_web_page($url);
+            
+            $data = $webCrawler->get_web_page($url);
             
         } catch (Exception $e){
 
@@ -69,14 +83,14 @@ class SitesController extends Controller
         if($data === null){
             $isMarfeelizable = null;
         } else {
-            $title = $this->get_title($data['content']);
+            $title = $webCrawler->get_title($data['content']);
         }
         
         if($title === null){
             $isMarfeelizable = null;
         } else{
-            $isNews = $this->textHasWord('news',$title);
-            $isNoticias = $this->textHasWord('noticias',$title);
+            $isNews = $webCrawler->textHasWord('news',$title);
+            $isNoticias = $webCrawler->textHasWord('noticias',$title);
         
             $isMarfeelizable = $isNews || $isNoticias;
             //return $isMarfeelizable;
@@ -85,8 +99,13 @@ class SitesController extends Controller
 
         return $isMarfeelizable;
     }
+}
 
-    function get_web_page( $url ){
+class WebCrawler {
+    
+    // I: Url
+    // O: content, errors from input Url
+    public function get_web_page( $url ){
         set_time_limit(0);
 
         $options = array(
@@ -119,8 +138,9 @@ class SitesController extends Controller
         return $header;
     }
 
-   
-    private function get_title($content){
+    // I: all content of webpage
+    // O: content between <title> tags 
+    public function get_title($content){
         $res = preg_match("/<title>(.*)<\/title>/siU", $content, $title_matches);
         if (!$res) 
             return null; 
@@ -131,8 +151,9 @@ class SitesController extends Controller
         return $title;
     }
 
-    //returns TRUE if $word is inside $text
-    private function textHasWord(string $word, string $text){
+    // I: a text and a word
+    // O: true if the word is inside the text / false otherwise
+    public function textHasWord(string $word, string $text){
         $word = strtoupper($word);
         $text = strtoupper($text);
 
@@ -142,7 +163,5 @@ class SitesController extends Controller
             return 1;
         }
     }
-
-
 
 }
