@@ -35,31 +35,55 @@ class SitesController extends Controller
         $input = $request->all();
         $marfeelOperations = new MarfeelOperations;
 
-        //check if array
-        if(is_array($input)){
-            
-            //loop through json array
+        if($this->checkInput($input)){
             foreach ($input as $site) {
-                
-                $isMarfeelizable = $marfeelOperations->checkIsMarfeelizable($site['url']);
-                //return response()->json($isMarfeelizable);
+                if($this->checkElement($site)){
+                    $isMarfeelizable = $marfeelOperations->checkIsMarfeelizable($site['url']);
 
-                if($isMarfeelizable == true){
-                    //isMarfeelizable -> 1
-                    $site['isMarfeelizable'] = 1;
-                    Site::create($site);
-                } else if ($isMarfeelizable == false){
-                    //isMarfeelizable -> 0
-                    $site['isMarfeelizable'] = 0;
-                    Site::create($site);
-                } else {
-                    //isMarfeelizable -> null 
+                    if($isMarfeelizable == true){
+                        //isMarfeelizable -> 1
+                        $site['isMarfeelizable'] = 1;
+                        Site::create($site);
+                    } else if ($isMarfeelizable == false){
+                        //isMarfeelizable -> 0
+                        $site['isMarfeelizable'] = 0;
+                        Site::create($site);
+                    }
                 }
                 
+                
             }
+        } else {
+            abort(400);
         }
 
         return $request;
+        
+    }
+
+    public function checkInput(array $input){
+
+        if(is_array($input)){
+            if(count($input) > 0){
+                if(isset($input['url'])){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function checkElement(array $input){
+
+        if(isset($input['url'])){
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
 }
