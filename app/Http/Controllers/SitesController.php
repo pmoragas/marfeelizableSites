@@ -20,7 +20,6 @@ class SitesController extends Controller
         $webpage = $webCrawler->get_web_page('sex.com');
         
         return response()->json($webpage);
-        //return response()->json('');
     }
 
     
@@ -61,6 +60,8 @@ class SitesController extends Controller
         
     }
 
+    // I: array
+    // O: true if the array contains more than 0 elements and has the 'url' set / false otherwise
     public function checkInput(array $input){
 
         if(is_array($input)){
@@ -76,6 +77,8 @@ class SitesController extends Controller
         return false;
     }
 
+    // I: array
+    // O: true if the array contains the key 'url' / false otherwise
     public function checkElement(array $input){
 
         if(isset($input['url'])){
