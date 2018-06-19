@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-require(__DIR__.'/../../Includes/MarfeelOperations.php');
 
 use Illuminate\Http\Request;
 use App\Site;
+
 
 class SitesController extends Controller
 {
