@@ -15,6 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('sites', 'SitesController@index');
-
 Route::post('sites', 'SitesController@store');

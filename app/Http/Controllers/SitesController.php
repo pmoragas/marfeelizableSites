@@ -9,20 +9,7 @@ use App\Site;
 
 class SitesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $webCrawler = new WebCrawler;
-        $webpage = $webCrawler->get_web_page('sex.com');
         
-        return response()->json($webpage);
-    }
-
-    
     /**
      * Store a newly created resource in storage.
      *
