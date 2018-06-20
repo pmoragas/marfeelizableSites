@@ -9,7 +9,9 @@ use App\Site;
 
 class SitesController extends Controller
 {
-        
+    
+
+    
     /**
      * Store a newly created resource in storage.
      *
